@@ -11,6 +11,29 @@ from aurora_back import settings
 pending_otps = {}
 
 @csrf_exempt
+def registration(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    data = json.loads(request.body)
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
+
+    if not username or not password or not email:
+        return JsonResponse({"status": "error", "message": "Username and password are required"}, status=400)
+
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({"status": "error", "message": "Username already exists"}, status=400)
+
+    user = User.objects.create_user(
+        username=username,
+        password=password,
+        email=email
+    )
+    return JsonResponse({"status": "success", "message": "User created successfully"}, status=201)
+
+@csrf_exempt
 def send_otp(request):
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)

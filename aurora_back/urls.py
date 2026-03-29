@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from api.views import  verify_otp, send_otp
+from api.views import verify_otp, send_otp, registration
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/registration/",registration),
     path("api/send-otp/", send_otp),
     path('api/verify-otp/',verify_otp)
 ]
