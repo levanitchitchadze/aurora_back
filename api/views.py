@@ -18,7 +18,7 @@ def send_otp(request):
     data = json.loads(request.body)
     username = data.get('username')
     password = data.get('password')
-    print(request)
+
     user = authenticate(username=username, password=password)
 
     if user is None:
@@ -26,7 +26,7 @@ def send_otp(request):
 
     otp_code = str(random.randint(100000, 999999))
     pending_otps[username] = otp_code
-    print(pending_otps)
+
 
     subject = 'Your Aurora Login Code'
     message = f'Your verification code is: {otp_code}'
@@ -50,8 +50,8 @@ def verify_otp(request):
     data = json.loads(request.body)
     username = data.get('username')
     otp = data.get('otp')
-    print(pending_otps)
-    print(pending_otps[username])
+
+
     if otp != pending_otps[username]:
         return JsonResponse({"error": "Invalid OTP"}, status=401)
     else:
